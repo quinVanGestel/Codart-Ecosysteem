@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -5,7 +6,9 @@ public class TimeManager : MonoBehaviour
 {
     //backing field
     private static TimeManager _instance;
-    public float TimeSpeed { get; }
+    public float TimeScale { get; }                                                                                                 
+    public float GoFaster;
+    public float amount = 3f;
 
     public static TimeManager Instance
     {
@@ -28,8 +31,17 @@ public class TimeManager : MonoBehaviour
     {
         Instance = this; 
     }
-    
-    
-    
-    
+
+    private void Start()
+    {
+        
+    }
+
+    public void Fasterplsss()
+    {
+       // if ()
+       // {
+            GoFaster = TimeScale * amount;
+      //  }
+    }
 }

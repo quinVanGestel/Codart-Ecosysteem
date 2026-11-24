@@ -3,6 +3,12 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
+  <component name="CMakeProjectFlavorService">
+    <option name="flavorId" value="CMakePlainProjectFlavor" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="0982760a-cfdf-4399-b46d-2a1dadc771ff" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/Assets/TutorialInfo.meta" beforeDir="false" />
@@ -38,6 +44,65 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="4.787633859487813E-93" />
+      <entry key="MS500" value="3.4357708124956585E-19" />
+      <entry key="S2" value="2.4286694216847542E-5" />
+      <entry key="S5" value="0.0186573561481759" />
+      <entry key="S10" value="0.30008893325601754" />
+      <entry key="S30" value="2.7274427473275664" />
+      <entry key="S60" value="4.926771187971678" />
+      <entry key="M2" value="6.846602629927777" />
+      <entry key="M5" value="10.206462402399547" />
+      <entry key="M10" value="14.169394550618536" />
+      <entry key="M15" value="17.64996156900055" />
+      <entry key="M30" value="26.197676753362785" />
+      <entry key="H1" value="35.609975360448246" />
+      <entry key="H2" value="42.94144776954147" />
+      <entry key="H4" value="47.56852157973253" />
+      <entry key="D1" value="52.03274092805066" />
+      <entry key="W1" value="52.86021390572016" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="1.0000000000000104" />
+      <entry key="MS500" value="1.0015974649581207" />
+      <entry key="S2" value="1.199921185824571" />
+      <entry key="S5" value="1.5281225361167532" />
+      <entry key="S10" value="1.7785763035621458" />
+      <entry key="S30" value="2.2758719958985116" />
+      <entry key="S60" value="2.5631085607806012" />
+      <entry key="M2" value="2.806680438770189" />
+      <entry key="M5" value="3.475734397657396" />
+      <entry key="M10" value="4.34871690075831" />
+      <entry key="M15" value="5.03910549371636" />
+      <entry key="M30" value="6.675439096494762" />
+      <entry key="H1" value="8.509058912149225" />
+      <entry key="H2" value="9.966590103836285" />
+      <entry key="H4" value="10.897627943123279" />
+      <entry key="D1" value="11.802991610854667" />
+      <entry key="W1" value="11.971510999956381" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="1.1401952914741424E-10" />
+      <entry key="MS500" value="0.010272051923176475" />
+      <entry key="S2" value="0.3681687873514896" />
+      <entry key="S5" value="0.9427049152802089" />
+      <entry key="S10" value="1.6106627217761977" />
+      <entry key="S30" value="4.654388026355523" />
+      <entry key="S60" value="7.246683213595719" />
+      <entry key="M2" value="9.502973562392427" />
+      <entry key="M5" value="13.599043869418184" />
+      <entry key="M10" value="18.461020495265863" />
+      <entry key="M15" value="22.639273757234324" />
+      <entry key="M30" value="32.829693822834706" />
+      <entry key="H1" value="44.085519742819706" />
+      <entry key="H2" value="52.88639627425842" />
+      <entry key="H4" value="58.45374562901769" />
+      <entry key="D1" value="63.83340675134928" />
+      <entry key="W1" value="64.83138575389145" />
+    </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -110,7 +175,7 @@
       <option name="presentableId" value="Default" />
       <updated>1794556489550</updated>
       <workItem from="1794556489551" duration="20306000" />
-      <workItem from="1795525070649" duration="270000" />
+      <workItem from="1795525070649" duration="5463000" />
     </task>
     <servers />
   </component>
