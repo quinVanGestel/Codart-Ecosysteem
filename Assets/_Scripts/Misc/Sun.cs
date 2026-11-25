@@ -60,11 +60,24 @@ public class Sun : MonoBehaviour
             return;
         }
 
-        SendRay();
-        timeSinceLastRay = 0f;
+        RayRoutineRecursive();
+
     }
 
-    private async void SendRay()
+    private async void RayRoutineRecursive()
+    {
+        if (timeSinceLastRay <= 1f / _raysPerSecond)
+        {
+            return;
+        }
+
+        SendRay();
+        timeSinceLastRay -= 1f / _raysPerSecond;
+        RayRoutineRecursive();
+    }
+
+
+    private void SendRay()
     {
         Vector3 direction = generalDirection; // generalDirection while testing
         Ray ray = new(start, direction);
