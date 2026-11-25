@@ -1,6 +1,6 @@
 
 using UnityEngine;
-using UnityEngine.Assemblies;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
@@ -11,28 +11,34 @@ public class TouchCheck : MonoBehaviour
     public Camera _mainCamera;
     public GameObject Sphere;
 
-    private float _scaleAmount = 150f;
+    private float _scaleAmount = 50f;
+
     public Material[] Ballcolor;
     public int colorIndex = 0;
 
     void Start()
     {
-        Sphere.GetComponent<MeshRenderer>().material = Ballcolor[colorIndex];
+        if (_mainCamera == null)
+            _mainCamera = Camera.main;
     }
+
     void OnEnable()
     {
-        _mainCamera = Camera.main;
-
         EnhancedTouchSupport.Enable();
 
+        // Alleen muis simuleren in de Unity Editor
+#if UNITY_EDITOR
         if (MouseAsTouch)
             TouchSimulation.Enable();
+#endif
     }
 
     void OnDisable()
     {
+#if UNITY_EDITOR
         if (MouseAsTouch)
             TouchSimulation.Disable();
+#endif
 
         EnhancedTouchSupport.Disable();
     }
@@ -41,25 +47,48 @@ public class TouchCheck : MonoBehaviour
     {
         foreach (var touch in Touch.activeTouches)
         {
-            if (touch.phase == UnityEngine.InputSystem.TouchPhase.Began)
+            if (touch.phase == UnityEngine.InputSystem.TouchPhase.Began ||
+                touch.phase == UnityEngine.InputSystem.TouchPhase.Moved)
             {
-                CheckTouch(touch.screenPosition);
+                CheckTouch(touch.screenPosition, touch.finger.index);
             }
         }
     }
 
-    void CheckTouch(Vector2 position)
+    void CheckTouch(Vector2 position, int fingerIndex)
     {
+        if (_mainCamera == null || Sphere == null)
+            return;
+
         Ray ray = _mainCamera.ScreenPointToRay(position);
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            if (hit.collider.gameObject == gameObject)
+            // Controleer ook child-colliders
+            if (hit.transform == transform ||
+                hit.transform.IsChildOf(transform))
             {
-                colorIndex = Random.Range(0, Ballcolor.Length);
-                GameObject newSphere = Instantiate(Sphere, hit.point + hit.normal * 0.5f, Quaternion.identity);
+                if (Ballcolor == null || Ballcolor.Length == 0)
+                    return;
 
-                newSphere.transform.localScale = Vector3.one * _scaleAmount;
+                colorIndex = Mathf.Clamp(
+                    fingerIndex, 0, Ballcolor.Length - 1
+                );
+
+                GameObject newSphere = Instantiate(
+                    Sphere,
+                    hit.point + Vector3.up * 136.8f,
+                    Quaternion.identity
+                );
+
+                MeshRenderer renderer =
+                    newSphere.GetComponentInChildren<MeshRenderer>();
+
+                if (renderer != null)
+                    renderer.material = Ballcolor[colorIndex];
+
+                newSphere.transform.localScale =
+                    Vector3.one * _scaleAmount;
             }
         }
     }
