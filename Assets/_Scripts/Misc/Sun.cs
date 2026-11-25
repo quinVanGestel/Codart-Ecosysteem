@@ -1,90 +1,90 @@
-using Unity.VisualScripting;
-using UnityEngine;
+// using System.Threading.Tasks;
+// using Unity.VisualScripting;
+// using UnityEngine;
 
-public class Sun : MonoBehaviour
-{
-    [SerializeField] private float _raysPerSecond;
-    [SerializeField] private float _energyPerSecond;
-    private float _energyPerRay
-    {
-        get
-        {
-            if (_energyPerRay == 0)
-            {
-                return 0f;
-            }
+// public class Sun : MonoBehaviour
+// {
+//     [SerializeField] private float _raysPerSecond;
+//     [SerializeField] private float _energyPerSecond;
+//     private float _energyPerRay
+//     {
+//         get
+//         {
+//             if (_energyPerRay == 0)
+//             {
+//                 return 0f;
+//             }
 
-            return _energyPerSecond / _energyPerRay;
-        }
-    }
+//             return _energyPerSecond / _energyPerRay;
+//         }
+//     }
 
-    private float timeSinceLastRay;
+//     private float _timeSinceLastRay;
 
-    public float MaxDistance;
-    public bool DebugMode;
+//     public float MaxDistance;
+//     public bool DebugMode;
+//     private int _sentRayAmount;
 
-    private Vector3 start
-    {
-        get
-        {
-            return transform.position;
-        }
-    }
+//     private Vector3 start
+//     {
+//         get
+//         {
+//             return transform.position;
+//         }
+//     }
 
-    private Vector3 generalDirection
-    {
-        get
-        {
-            return (transform.forward);
-        }
-    }
+//     private Vector3 generalDirection
+//     {
+//         get
+//         {
+//             return transform.forward;
+//         }
+//     }
 
-    private void Start()
-    {
-        // Debug.Log("generalDirection " + generalDirection);
-        // Debug.Log("transform.rotation.eulerAngles "+transform.rotation.eulerAngles);
-    }
+//     private void Start()
+//     {
+//         // Debug.Log("generalDirection " + generalDirection);
+//         // Debug.Log("transform.rotation.eulerAngles "+transform.rotation.eulerAngles);
+//     }
 
-    private void Update()
-    {
-        RayRoutineEntry();
+//     private void Update()
+//     {
+//         RayRoutineEntry();
+//     }
 
+//     private void RayRoutineEntry()
+//     {
+//         if (_timeSinceLastRay <= 1f / _raysPerSecond)
+//         {   
+//             _timeSinceLastRay += Time.deltaTime;
+//             return;
+//         }
 
-    }
+//         _timeSinceLastRay = RayRoutineRecursive(_timeSinceLastRay);
+//     }
 
-    private void RayRoutineEntry()
-    {
-        if (timeSinceLastRay <= 1f / _raysPerSecond)
-        {
-            timeSinceLastRay += Time.deltaTime;
-            return;
-        }
+//     private async float RayRoutineRecursive(float timeSinceLastRay)
+//     {
+//         if (timeSinceLastRay <= 1f / _raysPerSecond)
+//         {
+//             return timeSinceLastRay;
+//         }
 
-        RayRoutineRecursive();
+//         SendRay();
+//         timeSinceLastRay -= 1f / _raysPerSecond;
+//         return RayRoutineRecursive(timeSinceLastRay);
+//     }
 
-    }
+//     private async void SendRay()
+//     {
+//         Vector3 direction = generalDirection; // generalDirection while testing
+//         Ray ray = new(start, direction);
+//         Debug.DrawRay(start, direction);
+//         Physics.Raycast(ray, out RaycastHit hitInfo, MaxDistance);
+//         RaycastCommand.ScheduleBatch
 
-    private async void RayRoutineRecursive()
-    {
-        if (timeSinceLastRay <= 1f / _raysPerSecond)
-        {
-            return;
-        }
+//         Debug.Log("Ray sent");
+//         // Debug.Log("Ray has been sent from " + start + " in direction " + direction);
+//     }
 
-        SendRay();
-        timeSinceLastRay -= 1f / _raysPerSecond;
-        RayRoutineRecursive();
-    }
-
-
-    private void SendRay()
-    {
-        Vector3 direction = generalDirection; // generalDirection while testing
-        Ray ray = new(start, direction);
-        Debug.DrawRay(start, direction);
-        Physics.Raycast(ray, out RaycastHit hitInfo, MaxDistance);
-
-        Debug.Log("Ray has been sent from " + start + " in direction " + direction);
-    }
-
-}
+// }
