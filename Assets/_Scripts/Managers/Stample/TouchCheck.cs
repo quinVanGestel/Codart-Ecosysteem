@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.Assemblies;
 using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
@@ -11,7 +12,13 @@ public class TouchCheck : MonoBehaviour
     public GameObject Sphere;
 
     private float _scaleAmount = 150f;
+    public Material[] Ballcolor;
+    public int colorIndex = 0;
 
+    void Start()
+    {
+        Sphere.GetComponent<MeshRenderer>().material = Ballcolor[colorIndex];
+    }
     void OnEnable()
     {
         _mainCamera = Camera.main;
@@ -49,7 +56,7 @@ public class TouchCheck : MonoBehaviour
         {
             if (hit.collider.gameObject == gameObject)
             {
-
+                colorIndex = Random.Range(0, Ballcolor.Length);
                 GameObject newSphere = Instantiate(Sphere, hit.point + hit.normal * 0.5f, Quaternion.identity);
 
                 newSphere.transform.localScale = Vector3.one * _scaleAmount;
