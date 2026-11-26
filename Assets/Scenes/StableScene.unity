@@ -206,7 +206,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -159, y: 5.6, z: -64}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Follow
   MouseAsTouch: 1
-  _mainCamera: {fileID: 0}
+  _mainCamera: {fileID: 950039200}
 --- !u!54 &439523848
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -411,17 +411,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0702a64cfeef79445b23e71b5f7b1994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TouchCheck
-  MouseAsTouch: 1
-  _mainCamera: {fileID: 0}
-  Sphere: {fileID: 3248850934877664936, guid: 94b0cf99c8befc64185baa305fb8562a, type: 3}
-  Ballcolor:
-  - {fileID: 2100000, guid: b89b0b464cfaee24789ea6452b81e273, type: 2}
-  - {fileID: 2100000, guid: 10f675115fae67d4b8351bc682b1f433, type: 2}
-  - {fileID: 2100000, guid: 4d6232d4f47224240adf32c7c850c417, type: 2}
-  - {fileID: 2100000, guid: 43f94493ee263a6438728e7b00a40c12, type: 2}
-  - {fileID: 2100000, guid: 180261cd677dbb941a7b210ee726c5a4, type: 2}
-  - {fileID: 2100000, guid: 6454714b030d7204f9f3cc42feaba37f, type: 2}
-  colorIndex: 0
+  MainCamera: {fileID: 950039200}
+  CubePrefab: {fileID: 3248850934877664936, guid: 94b0cf99c8befc64185baa305fb8562a, type: 3}
+  _spawnHeight: 24
+  SpawnDelay: 0.5
 --- !u!65 &561802174
 BoxCollider:
   m_ObjectHideFlags: 0
