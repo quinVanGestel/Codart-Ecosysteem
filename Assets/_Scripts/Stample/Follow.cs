@@ -1,106 +1,59 @@
-
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
+using System.Collections.Generic;
+
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class Follow : MonoBehaviour
 {
-    public bool MouseAsTouch = true;
-    public Camera _mainCamera;
+    public Camera MainCamera;
+    public GameObject CursorPrefab;
 
-    private float _fixedHeight = 160f;
+    public float CursorOffset = 0.02f;
 
-    private MeshRenderer _meshRenderer;
+    private Dictionary<int, GameObject> cursors =
+        new Dictionary<int, GameObject>();
 
-    private float _lastTapTime;
-    public float DoubleTapTime = 0.3f;
-
-    private Vector3 _offset;
-    private bool _recalibrated = false;
-
-    void Awake()
+    void Update()
     {
-        _meshRenderer = GetComponent<MeshRenderer>();
-        _meshRenderer.enabled = false;
-    }
+        List<int> activeFingerIDs = new List<int>();
 
-    void OnEnable()
-    {
-        _mainCamera = Camera.main;
-        EnhancedTouchSupport.Enable();
-
-        if (MouseAsTouch)
-            TouchSimulation.Enable();
-    }
-
-    void OnDisable()
-    {
-        if (MouseAsTouch)
-            TouchSimulation.Disable();
-
-        EnhancedTouchSupport.Disable();
-    }
-
-    void FixedUpdate()
-    {
-        if (Touch.activeTouches.Count == 0)
+        foreach (var touch in Touch.activeTouches)
         {
-            _meshRenderer.enabled = false;
-            return;
-        }
+            int fingerID = touch.finger.index;
+            activeFingerIDs.Add(fingerID);
 
-        var touch = Touch.activeTouches[0];
-
-        // Double tap detecteren
-        if (touch.phase == UnityEngine.InputSystem.TouchPhase.Began)
-        {
-            if (Time.time - _lastTapTime <= DoubleTapTime)
+            if (!cursors.ContainsKey(fingerID))
             {
-                Recalibrate(touch.screenPosition);
+                GameObject cursor = Instantiate(CursorPrefab);
+                cursors.Add(fingerID, cursor);
             }
 
-            _lastTapTime = Time.time;
+            GameObject currentCursor = cursors[fingerID];
+
+            // Vinger raakt het scherm aan
+            currentCursor.SetActive(true);
+
+            Ray ray = MainCamera.ScreenPointToRay(touch.screenPosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                currentCursor.transform.position =
+                    hit.point + hit.normal * CursorOffset;
+            }
+            else
+            {
+                currentCursor.SetActive(false);
+            }
         }
 
-        Ray ray = _mainCamera.ScreenPointToRay(touch.screenPosition);
-
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        // Vingers die losgelaten zijn
+        foreach (var cursor in cursors)
         {
-            _meshRenderer.enabled = true;
-
-            Vector3 targetPosition = new Vector3(
-                hit.point.x,
-                _fixedHeight,
-                hit.point.z
-            );
-
-            if (_recalibrated)
-                targetPosition += _offset;
-
-            transform.position = targetPosition;
-        }
-        else
-        {
-            _meshRenderer.enabled = false;
-        }
-    }
-
-    void Recalibrate(Vector2 touchPosition)
-    {
-        Ray ray = _mainCamera.ScreenPointToRay(touchPosition);
-
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            Vector3 targetPosition = new Vector3(
-                hit.point.x,
-                _fixedHeight,
-                hit.point.z
-            );
-
-            _offset = transform.position - targetPosition;
-            _recalibrated = true;
-
-            Debug.Log("Cursor recalibrated!");
+            if (!activeFingerIDs.Contains(cursor.Key))
+            {
+                cursor.Value.SetActive(false);
+            }
         }
     }
 }
