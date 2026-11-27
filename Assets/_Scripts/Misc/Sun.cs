@@ -26,14 +26,14 @@ public class Sun : MonoBehaviour
     public bool DebugMode;
     private int _sentRayAmount;
 
-    private SunRayCalculations _sunRayCalculations
+    private SunRayCalculations _sunRayCalculations; // Backing field, don't use this.
+    private SunRayCalculations SunRayCalculations
     {
         get
         {
-            return _sunRayCalculations ??= GetComponent<SunRayCalculations>();
+            _sunRayCalculations ??= GetComponent<SunRayCalculations>();
+            return _sunRayCalculations;
         }
-
-        set { _sunRayCalculations = value; }
     }
 
     private void Start()
@@ -47,8 +47,22 @@ public class Sun : MonoBehaviour
         RayRoutineEntry();
     }
 
+    // private int raysToSendThisFrame()
+    // {
+    //     return Mathf.FloorToInt(_raysPerSecond * Time.deltaTime);
+    // }
+
     private void RayRoutineEntry()
     {
+        //     int raysToSend = raysToSendThisFrame();
+        //     while (raysToSend != 0)
+        //     {
+        //         SendRay();
+        //         raysToSend--;
+        //     }
+
+
+
         if (_timeSinceLastRay <= 1f / _raysPerSecond)
         {
             _timeSinceLastRay += Time.deltaTime;
@@ -58,7 +72,7 @@ public class Sun : MonoBehaviour
         _timeSinceLastRay = RayRoutineRecursive(_timeSinceLastRay);
     }
 
-    private async float RayRoutineRecursive(float timeSinceLastRay)
+    private float RayRoutineRecursive(float timeSinceLastRay)
     {
         if (timeSinceLastRay <= 1f / _raysPerSecond)
         {
@@ -70,16 +84,30 @@ public class Sun : MonoBehaviour
         return RayRoutineRecursive(timeSinceLastRay);
     }
 
-    private async void SendRay()
+    private void SendRay()
     {
-        Vector3 direction = generalDirection; // generalDirection while testing
-        Ray ray = new(start, direction);
-        Debug.DrawRay(start, direction);
+        Vector3 direction = SunRayCalculations.getNormalisedDirection();
+        Vector3 origin = SunRayCalculations._origin;
+        Ray ray = new(origin, direction);
+        Debug.DrawRay(origin, direction);
         Physics.Raycast(ray, out RaycastHit hitInfo, MaxDistance);
-        RaycastCommand.ScheduleBatch
+
+        ProcessRaycastHit(hitInfo);
 
         Debug.Log("Ray sent");
-        // Debug.Log("Ray has been sent from " + start + " in direction " + direction);
+        Debug.Log("Ray has been sent from " + origin + " to direction " + direction);
     }
+
+    private void ProcessRaycastHit(RaycastHit hitInfo)
+    {
+        Interfaces.ISunRayable sunRayableObject = hitInfo.collider.gameObject.GetComponent<Interfaces.ISunRayable>();
+        if (sunRayableObject == null)
+        {
+            return;
+        }
+
+        sunRayableObject.ReceiveEnergy(_energyPerRay);
+    }
+
 
 }

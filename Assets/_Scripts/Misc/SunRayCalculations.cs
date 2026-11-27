@@ -20,7 +20,7 @@ public class SunRayCalculations : MonoBehaviour
         }
     }
 
-    private Vector3 _origin
+    public Vector3 _origin
     {
         get
         {
@@ -30,16 +30,22 @@ public class SunRayCalculations : MonoBehaviour
 
     public Vector3 getNormalisedDirection()
     {
-        return (_origin - getRandomPosition(_lowerBounds, _upperBounds)).normalized;
+        Vector3 rawResult = getRandomPosition(_lowerBounds, _upperBounds) - _origin;
+        Vector3 normalisedResult = rawResult.normalized;
+        // Debug.Log("getNormalisedDirection called. Origin: " + _origin + " rawResult: " + rawResult + " normalisedResult: " + normalisedResult);
+        return normalisedResult;
     }
 
     private Vector3 getRandomPosition(Vector3 lowerBound, Vector3 upperBound)
     {
-        return new(
+        Vector3 result = new(
             Random.Range(lowerBound.x, upperBound.x),
             Random.Range(lowerBound.y, upperBound.y),
             Random.Range(lowerBound.z, upperBound.z)
         );
+        // Debug.Log("getRandomPosition test. lowerBound: " + lowerBound + " upperBound:" + upperBound + " result: " + result);
+
+        return result;
     }
 
 }
