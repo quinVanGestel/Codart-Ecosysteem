@@ -1,4 +1,6 @@
+
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using System.Collections.Generic;
 
@@ -15,16 +17,8 @@ public class TouchCheck : MonoBehaviour
     public float SpawnHeight = 24f;
     public float SpawnDelay = 0.5f;
 
-    [Header("Sound")]
-    private IPlayShortSounds soundPlayer;
-
     private Dictionary<int, float> nextSpawnTime =
         new Dictionary<int, float>();
-
-    void Awake()
-    {
-        soundPlayer = FindFirstObjectByType<SoundManager>();
-    }
 
     void OnEnable()
     {
@@ -80,16 +74,9 @@ public class TouchCheck : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            Vector3 spawnPosition = new Vector3(
-                hit.point.x,
-                transform.position.y + SpawnHeight,
-                hit.point.z
-            );
+            Vector3 spawnPosition = new Vector3(hit.point.x,transform.position.y + SpawnHeight,hit.point.z);
 
-            Instantiate(CubePrefab, spawnPosition, Quaternion.identity);
-
-            // Interface gebruiken
-            soundPlayer?.PlayPop();
+            Instantiate(CubePrefab,spawnPosition,Quaternion.identity);
 
             Debug.Log("Cube spawned: " + spawnPosition);
         }
