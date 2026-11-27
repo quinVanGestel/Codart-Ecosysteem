@@ -10,15 +10,33 @@ public class TouchCheck : MonoBehaviour
 {
     [Header("Touch")]
     public bool MouseAsTouch = true;
+    private IPlayShortSound soundManager;
 
     [Header("Cube Spawning")]
     public Camera MainCamera;
     public GameObject CubePrefab;
+
     public float SpawnHeight = 24f;
+    public float SpawnDistance = 0.02f;
     public float SpawnDelay = 0.5f;
+
+    [Header("Cube Limit")]
+    public int CubeCap = 50;
 
     private Dictionary<int, float> nextSpawnTime =
         new Dictionary<int, float>();
+
+    private List<GameObject> spawnedCubes =
+        new List<GameObject>();
+
+    void Awake()
+    {
+        soundManager = FindObjectOfType<SoundManager>();
+        if (soundManager == null)
+        {
+            Debug.LogWarning("SoundManager not found in the scene.");
+        }
+    }
 
     void OnEnable()
     {
@@ -70,15 +88,32 @@ public class TouchCheck : MonoBehaviour
         if (MainCamera == null || CubePrefab == null)
             return;
 
+        // Verwijder verwijzingen naar vernietigde cubes
+        spawnedCubes.RemoveAll(cube => cube == null);
+
+        // Controleer CubeCap
+        if (spawnedCubes.Count >= CubeCap)
+            return;
+
         Ray ray = MainCamera.ScreenPointToRay(screenPosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            Vector3 spawnPosition = new Vector3(hit.point.x,transform.position.y + SpawnHeight,hit.point.z);
+            Vector3 spawnPosition =
+                new Vector3(
+                    hit.point.x,
+                    transform.position.y + SpawnHeight,
+                    hit.point.z
+                );
 
-            Instantiate(CubePrefab,spawnPosition,Quaternion.identity);
+            // Extra afstand vanaf het raakpunt
+            spawnPosition += hit.normal * SpawnDistance;
 
-            Debug.Log("Cube spawned: " + spawnPosition);
+            GameObject newCube = Instantiate(CubePrefab,spawnPosition,Quaternion.identity);
+
+            spawnedCubes.Add(newCube);
+
+            soundManager?.PlayPop();
         }
     }
 
@@ -87,6 +122,11 @@ public class TouchCheck : MonoBehaviour
         GUI.Label(
             new Rect(10, 10, 300, 30),
             "Active Fingers: " + Touch.activeTouches.Count
+        );
+
+        GUI.Label(
+            new Rect(10, 40, 300, 30),
+            "Cubes: " + spawnedCubes.Count + " / " + CubeCap
         );
     }
 }
